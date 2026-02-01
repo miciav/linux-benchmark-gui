@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+from pathlib import Path
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QActionGroup
@@ -17,6 +18,7 @@ from PySide6.QtWidgets import (
     QStackedWidget,
     QVBoxLayout,
     QWidget,
+    QPushButton,
 )
 
 from lb_gui.resources.theme import (
@@ -60,6 +62,7 @@ class MainWindow(QMainWindow):
         self.services = services
         self._views: dict[str, QWidget] = {}
         self._viewmodels: dict[str, object] = {}
+        self._current_stop_file: Path | None = None
 
         self._setup_ui()
         self._setup_views()
@@ -91,10 +94,21 @@ class MainWindow(QMainWindow):
             ))
             self._sidebar.addItem(item)
 
+        self._sidebar_container = QWidget()
+        sidebar_layout = QVBoxLayout(self._sidebar_container)
+        sidebar_layout.setContentsMargins(0, 0, 0, 0)
+        sidebar_layout.setSpacing(6)
+        sidebar_layout.addWidget(self._sidebar)
+
+        self._stop_button = QPushButton("Stop Run")
+        self._stop_button.setEnabled(False)
+        self._stop_button.clicked.connect(self._on_stop_clicked)
+        sidebar_layout.addWidget(self._stop_button)
+
         # Stacked widget for views
         self._stack = QStackedWidget()
 
-        main_layout.addWidget(self._sidebar)
+        main_layout.addWidget(self._sidebar_container)
         main_layout.addWidget(self._stack, 1)
 
     def _setup_views(self) -> None:
@@ -323,6 +337,13 @@ class MainWindow(QMainWindow):
     def _set_ui_busy(self, busy: bool) -> None:
         """Enable or disable UI interaction during run."""
         self._sidebar.setEnabled(not busy)
+        if hasattr(self, "_stop_button"):
+            is_running = bool(
+                busy
+                and getattr(self, "_current_worker", None)
+                and self._current_worker.is_running()  # type: ignore[attr-defined]
+            )
+            self._stop_button.setEnabled(is_running)
         if busy:
             QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
         else:
@@ -340,6 +361,39 @@ class MainWindow(QMainWindow):
                 "Run Failed",
                 f"Benchmark run failed or completed with error:\n{error}",
             )
+
+    def _on_stop_clicked(self) -> None:
+        """Handle stop button click with confirmation."""
+        stop_path = self._current_stop_file
+        if not stop_path:
+            QMessageBox.warning(
+                self,
+                "Stop Run",
+                "Stop file path not available for this run.",
+            )
+            return
+        reply = QMessageBox.question(
+            self,
+            "Stop Run",
+            "Gracefully stop the current run?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No,
+        )
+        if reply != QMessageBox.StandardButton.Yes:
+            return
+        try:
+            stop_path = Path(stop_path)
+            stop_path.parent.mkdir(parents=True, exist_ok=True)
+            stop_path.write_text("stop")
+        except Exception as exc:
+            QMessageBox.critical(
+                self,
+                "Stop Failed",
+                f"Failed to write stop file:\n{exc}",
+            )
+            return
+        if hasattr(self, "_stop_button"):
+            self._stop_button.setEnabled(False)
 
     def closeEvent(self, event: object) -> None:
         """Handle window close request."""
