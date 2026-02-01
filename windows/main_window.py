@@ -312,9 +312,6 @@ class MainWindow(QMainWindow):
             # Switch to dashboard view
             self.select_section("dashboard")
 
-            # Lock UI
-            self._set_ui_busy(True)
-
             # Create and start worker
             worker = self.services.run_controller.create_worker(request)  # type: ignore
 
@@ -331,6 +328,7 @@ class MainWindow(QMainWindow):
             # Store worker reference to prevent garbage collection
             self._current_worker = worker
             worker.start()
+            self._set_ui_busy(True)
 
         run_setup_view.start_run_requested.connect(on_start_run)
 
