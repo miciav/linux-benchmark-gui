@@ -276,6 +276,15 @@ class MainWindow(QMainWindow):
                 )
                 return
 
+            from lb_gui.adapters.gui_ui_adapter import GuiUIAdapter
+
+            adapter = GuiUIAdapter(dashboard_vm)  # type: ignore[arg-type]
+            try:
+                request.ui_adapter = adapter  # type: ignore[attr-defined]
+            except Exception:
+                pass
+            self._current_stop_file = getattr(request, "stop_file", None)
+
             # Create a minimal journal for initialization
             from lb_app.api import RunJournal
 
@@ -323,6 +332,7 @@ class MainWindow(QMainWindow):
         """Handle run completion to restore UI state."""
         self._set_ui_busy(False)
         self._current_worker = None
+        self._current_stop_file = None
         
         if not success:
              QMessageBox.critical(
