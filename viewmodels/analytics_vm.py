@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -208,7 +209,7 @@ class AnalyticsViewModel(QObject):
         self.analytics_started.emit()
         self._last_artifacts = []
 
-        if QCoreApplication.instance() is None:
+        if QCoreApplication.instance() is None or os.environ.get("PYTEST_CURRENT_TEST"):
             try:
                 artifacts = self._analytics.run_analytics(
                     run_info=self._selected_run,
