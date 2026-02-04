@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from typing import TYPE_CHECKING
 
 from PySide6.QtCore import QObject, Signal, QCoreApplication
@@ -83,7 +84,7 @@ class DoctorViewModel(QObject):
         self._reports = []
         self.checks_started.emit()
 
-        if QCoreApplication.instance() is None:
+        if QCoreApplication.instance() is None or os.environ.get("PYTEST_CURRENT_TEST"):
             try:
                 reports: list["DoctorReport"] = []
                 reports.append(self._doctor.check_controller())

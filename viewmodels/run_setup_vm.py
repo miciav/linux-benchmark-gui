@@ -13,6 +13,7 @@ from lb_app.api import (
     RunRequest,
     WorkloadIntensity,
 )
+from lb_app.services.run_journal import generate_run_id
 
 if TYPE_CHECKING:
     from lb_gui.services import PluginService, GUIConfigService
@@ -264,13 +265,19 @@ class RunSetupViewModel(QObject):
         if not is_valid or self._config is None:
             return None
 
+        run_id = self._run_id or generate_run_id()
+        stop_file = (
+            Path(self._stop_file)
+            if self._stop_file
+            else (self._config.output_dir / run_id / "STOP")
+        )
         return RunRequest(
             config=self._config,
             tests=self._selected_workloads,
-            run_id=self._run_id or None,
+            run_id=run_id,
             intensity=self._intensity if self._intensity != "user_defined" else None,
             repetitions=self._repetitions,
             execution_mode=self._execution_mode,
             node_count=self._node_count,
-            stop_file=Path(self._stop_file) if self._stop_file else None,
+            stop_file=stop_file,
         )
