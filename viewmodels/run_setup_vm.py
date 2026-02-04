@@ -9,11 +9,11 @@ from PySide6.QtCore import QObject, Signal
 
 from lb_app.api import (
     BenchmarkConfig,
+    generate_run_id,
     MAX_NODES,
     RunRequest,
     WorkloadIntensity,
 )
-from lb_app.services.run_journal import generate_run_id
 
 if TYPE_CHECKING:
     from lb_gui.services import PluginService, GUIConfigService
