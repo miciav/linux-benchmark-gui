@@ -208,7 +208,8 @@ class RunSetupViewModel(QObject):
             # Get enabled workloads
             available_registry = registry.available()
             enabled = {
-                name for name in available_registry
+                name
+                for name in available_registry
                 if platform_config.is_plugin_enabled(name)
             }
             from_config = set()

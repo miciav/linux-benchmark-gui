@@ -127,9 +127,7 @@ class AnalyticsView(QWidget):
         workloads_layout = QVBoxLayout()
         workloads_layout.addWidget(QLabel("Workloads:"))
         self._workloads_list = QListWidget()
-        self._workloads_list.setSelectionMode(
-            QListWidget.SelectionMode.MultiSelection
-        )
+        self._workloads_list.setSelectionMode(QListWidget.SelectionMode.MultiSelection)
         self._workloads_list.itemSelectionChanged.connect(
             self._on_workloads_selection_changed
         )

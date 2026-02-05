@@ -101,7 +101,9 @@ class RunSetupView(QWidget):
         # Workload list (multi-select)
         self._workload_list = QListWidget()
         self._workload_list.setSelectionMode(QListWidget.SelectionMode.MultiSelection)
-        self._workload_list.itemSelectionChanged.connect(self._on_workload_selection_changed)
+        self._workload_list.itemSelectionChanged.connect(
+            self._on_workload_selection_changed
+        )
         layout.addWidget(self._workload_list)
 
         # Selection info

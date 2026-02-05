@@ -145,12 +145,14 @@ class DoctorViewModel(QObject):
         for report in self._reports:
             for group in report.groups:
                 for item in group.items:
-                    results.append({
-                        "Group": group.title,
-                        "Check": item.label,
-                        "Status": "Pass" if item.ok else "FAIL",
-                        "Required": "Yes" if item.required else "No",
-                    })
+                    results.append(
+                        {
+                            "Group": group.title,
+                            "Check": item.label,
+                            "Status": "Pass" if item.ok else "FAIL",
+                            "Required": "Yes" if item.required else "No",
+                        }
+                    )
         return results
 
     def get_info_messages(self) -> list[str]:

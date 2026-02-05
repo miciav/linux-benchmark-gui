@@ -114,9 +114,7 @@ class ResultsView(QWidget):
         for field in detail_fields:
             label = QLabel("-")
             label.setWordWrap(True)
-            label.setTextInteractionFlags(
-                Qt.TextInteractionFlag.TextSelectableByMouse
-            )
+            label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
             self._detail_labels[field] = label
             self._details_form.addRow(f"{field}:", label)
 

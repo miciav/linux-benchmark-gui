@@ -14,7 +14,11 @@ from lb_gui.utils import format_datetime
 
 if TYPE_CHECKING:
     from lb_common.api import RunInfo
-    from lb_gui.services import AnalyticsServiceWrapper, RunCatalogServiceWrapper, GUIConfigService
+    from lb_gui.services import (
+        AnalyticsServiceWrapper,
+        RunCatalogServiceWrapper,
+        GUIConfigService,
+    )
     from lb_app.api import BenchmarkConfig
 
 

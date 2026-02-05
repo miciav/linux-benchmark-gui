@@ -103,7 +103,9 @@ class RunWorker(QObject):
             self._result = self._app_client.start_run(self._request, hooks)
 
             if self._result is None:
-                self.signals.finished.emit(False, "Run failed to start (validation error)")
+                self.signals.finished.emit(
+                    False, "Run failed to start (validation error)"
+                )
             else:
                 self.signals.finished.emit(True, "")
         except Exception as e:

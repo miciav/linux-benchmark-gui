@@ -33,7 +33,9 @@ class DoctorServiceWrapper:
         """Check connectivity to configured remote hosts."""
         return self._service.check_connectivity(config)
 
-    def run_all_checks(self, config: BenchmarkConfig | None = None) -> list[DoctorReport]:
+    def run_all_checks(
+        self, config: BenchmarkConfig | None = None
+    ) -> list[DoctorReport]:
         """Run all available checks.
 
         Args:

@@ -57,7 +57,9 @@ class MainWindow(QMainWindow):
         ("Doctor", "doctor"),
     ]
 
-    def __init__(self, services: "ServiceContainer", parent: QWidget | None = None) -> None:
+    def __init__(
+        self, services: "ServiceContainer", parent: QWidget | None = None
+    ) -> None:
         super().__init__(parent)
         self.services = services
         self._views: dict[str, QWidget] = {}
@@ -89,9 +91,13 @@ class MainWindow(QMainWindow):
         self._sidebar.setSpacing(2)
         for label, _ in self.SECTIONS:
             item = QListWidgetItem(label)
-            item.setSizeHint(item.sizeHint().expandedTo(
-                self._sidebar.sizeHint().scaled(0, 40, Qt.AspectRatioMode.IgnoreAspectRatio)
-            ))
+            item.setSizeHint(
+                item.sizeHint().expandedTo(
+                    self._sidebar.sizeHint().scaled(
+                        0, 40, Qt.AspectRatioMode.IgnoreAspectRatio
+                    )
+                )
+            )
             self._sidebar.addItem(item)
 
         self._sidebar_container = QWidget()
@@ -319,9 +325,13 @@ class MainWindow(QMainWindow):
             worker.signals.log_line.connect(dashboard_vm.on_log_line)  # type: ignore
             worker.signals.status_line.connect(dashboard_vm.on_status)  # type: ignore
             worker.signals.warning.connect(dashboard_vm.on_warning)  # type: ignore
-            worker.signals.journal_update.connect(dashboard_vm.on_journal_update)  # type: ignore
-            worker.signals.finished.connect(dashboard_vm.on_run_finished)  # type: ignore
-            
+            worker.signals.journal_update.connect(  # type: ignore
+                dashboard_vm.on_journal_update
+            )
+            worker.signals.finished.connect(  # type: ignore
+                dashboard_vm.on_run_finished
+            )
+
             # Connect worker signals to main window for cleanup
             worker.signals.finished.connect(self._on_run_finished)  # type: ignore
 
@@ -352,9 +362,9 @@ class MainWindow(QMainWindow):
         self._set_ui_busy(False)
         self._current_worker = None
         self._current_stop_file = None
-        
+
         if not success:
-             QMessageBox.critical(
+            QMessageBox.critical(
                 self,
                 "Run Failed",
                 f"Benchmark run failed or completed with error:\n{error}",
@@ -409,7 +419,7 @@ class MainWindow(QMainWindow):
             if reply == QMessageBox.StandardButton.No:
                 event.ignore()  # type: ignore
                 return
-        
+
         event.accept()  # type: ignore
 
     def _connect_config_flow(

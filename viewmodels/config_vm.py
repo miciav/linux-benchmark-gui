@@ -98,12 +98,14 @@ class ConfigViewModel(QObject):
 
         hosts = []
         for host in self._config.remote_hosts:
-            hosts.append({
-                "Name": host.name,
-                "Address": host.address,
-                "Port": str(host.port),
-                "User": host.user,
-            })
+            hosts.append(
+                {
+                    "Name": host.name,
+                    "Address": host.address,
+                    "Port": str(host.port),
+                    "User": host.user,
+                }
+            )
         return hosts
 
     def get_loki_info(self) -> dict[str, str]:
