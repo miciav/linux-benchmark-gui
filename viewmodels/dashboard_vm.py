@@ -9,7 +9,6 @@ from PySide6.QtCore import QObject, Signal
 from lb_app.api import (
     DashboardViewModel as AppDashboardViewModel,
     DashboardSnapshot,
-    DashboardRow,
     DashboardStatusSummary,
     build_dashboard_viewmodel,
     RunJournal,

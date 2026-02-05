@@ -7,8 +7,6 @@ from typing import TYPE_CHECKING, Sequence
 from PySide6.QtCore import QObject, QThread, Signal
 
 if TYPE_CHECKING:
-    from pathlib import Path
-
     from lb_app.api import AnalyticsKind
     from lb_common.api import RunInfo
     from lb_gui.services.analytics_service import AnalyticsServiceWrapper

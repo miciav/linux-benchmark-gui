@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Sequence
 
-from PySide6.QtWidgets import QHeaderView, QTableWidget, QTableWidgetItem
+from PySide6.QtWidgets import QTableWidget, QTableWidgetItem
 
 
 class PlanTable(QTableWidget):

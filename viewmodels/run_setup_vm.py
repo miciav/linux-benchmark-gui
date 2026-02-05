@@ -12,7 +12,6 @@ from lb_app.api import (
     generate_run_id,
     MAX_NODES,
     RunRequest,
-    WorkloadIntensity,
 )
 
 if TYPE_CHECKING:
